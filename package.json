@@ -1,12 +1,12 @@
 {
   "name": "pnr",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Node.js API for fetching PNR (Passenger Name Record) details.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
   },
-  "author": "",
+  "author": "Vijay Singh",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.8.4",
