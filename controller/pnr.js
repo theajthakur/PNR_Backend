@@ -8,7 +8,10 @@ const fetchPNRDetail = async (req, res) => {
       message: "Please provide a PNR number",
     });
   }
-  const pnrdetail = await fetchPNR(pnr);
+  let pnrdetail = await fetchPNR(pnr);
+  while (pnrdetail === undefined || pnrdetail.errorMessage) {
+    pnrdetail = await fetchPNR(pnr);
+  }
   return res.status(200).json(pnrdetail);
 };
 
