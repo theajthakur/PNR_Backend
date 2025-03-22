@@ -31,9 +31,8 @@ const fetchPNR = async (pnr) => {
       .join("; ");
     fs.writeFileSync("captcha.jpg", response.data);
     const captcha = await extractAndCalculate("captcha.jpg");
-    fetchPNRDetails(pnr, captcha, cookieHeader);
-
-    return setCookies;
+    const data = await fetchPNRDetails(pnr, captcha, cookieHeader);
+    return data;
   } catch (error) {
     console.error("Error fetching CAPTCHA:", error);
   }
@@ -58,7 +57,7 @@ async function fetchPNRDetails(pnr, captcha, cookies) {
       },
     });
 
-    console.log("Response Data:", response.data);
+    return response.data;
   } catch (error) {
     console.error("Error fetching PNR details:", error.message);
   }

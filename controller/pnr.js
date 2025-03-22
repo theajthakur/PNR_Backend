@@ -1,4 +1,5 @@
 const { fetchPNR } = require("../config/PNRFinder");
+
 const fetchPNRDetail = async (req, res) => {
   const { pnr } = req.params;
   if (!pnr) {
@@ -7,5 +8,8 @@ const fetchPNRDetail = async (req, res) => {
       message: "Please provide a PNR number",
     });
   }
-  return res.status(200).json(fetchPNR(pnr));
+  const pnrdetail = await fetchPNR(pnr);
+  return res.status(200).json(pnrdetail);
 };
+
+module.exports = { fetchPNRDetail };
