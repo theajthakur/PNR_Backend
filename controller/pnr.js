@@ -9,10 +9,24 @@ const fetchPNRDetail = async (req, res) => {
     });
   }
   let pnrdetail = await fetchPNR(pnr);
-  while (pnrdetail === undefined || pnrdetail.errorMessage) {
+
+  while (
+    pnrdetail &&
+    pnrdetail.errorMessage &&
+    pnrdetail.errorMessage.message == "Captcha not matched"
+  ) {
+    console.log("Captcha Reading Failed! Retrying...");
     pnrdetail = await fetchPNR(pnr);
   }
-  return res.status(200).json(pnrdetail);
+  const result = {};
+  if (pnrdetail.errorMessage) {
+    result.status = "error";
+    result.message = pnrdetail.errorMessage;
+    return res.status(400).json(result);
+  }
+  result.status = "success";
+  result.data = pnrdetail;
+  return res.status(200).json(result);
 };
 
 module.exports = { fetchPNRDetail };
