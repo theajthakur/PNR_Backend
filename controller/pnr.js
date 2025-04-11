@@ -8,16 +8,24 @@ const fetchPNRDetail = async (req, res) => {
       message: "Please provide a PNR number",
     });
   }
-  let pnrdetail = await fetchPNR(pnr);
+  const MAX_RETRIES = 5;
 
-  while (
-    pnrdetail &&
-    pnrdetail.errorMessage &&
-    pnrdetail.errorMessage.message == "Captcha not matched"
-  ) {
-    console.log("Captcha Reading Failed! Retrying...");
-    pnrdetail = await fetchPNR(pnr);
-  }
+  const fetchWithRetry = async (pnr, attempt = 1) => {
+    let pnrdetail = await fetchPNR(pnr);
+
+    if (
+      pnrdetail?.errorMessage === "Captcha not matched" &&
+      attempt < MAX_RETRIES
+    ) {
+      console.log(`Captcha Reading Failed! Retrying... (${attempt})`);
+      return await fetchWithRetry(pnr, attempt + 1);
+    }
+
+    return pnrdetail;
+  };
+
+  const pnrdetail = await fetchWithRetry(pnr);
+
   const result = {};
   if (pnrdetail.errorMessage) {
     result.status = "error";
