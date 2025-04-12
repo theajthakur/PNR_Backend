@@ -6,7 +6,7 @@ require("dotenv").config();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://pnr-backend.onrender.com"],
+    origin: ["http://localhost:5173", "https://theajthakur.github.io"],
   })
 );
 
