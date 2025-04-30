@@ -28,10 +28,12 @@ const fetchPNRDetail = async (req, res) => {
     const pnrdetail = await fetchWithRetry(pnr);
 
     const result = {};
-    if (!pnrdetail)
+    if (!pnrdetail) {
+      console.log(pnrdetail);
       return res
         .status(400)
         .json({ status: "error", message: "Unable to fetch PNR details" });
+    }
     if (pnrdetail.errorMessage) {
       result.status = "error";
       result.message = pnrdetail.errorMessage;
